@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: filmore-wordpress
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress_password
+      WORDPRESS_DB_NAME: hoang_ho_personal_brand_db
+      WORDPRESS_DEBUG: 1
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wp-content:/var/www/html/wp-content
+      - ./uploads:/var/www/html/wp-content/uploads
+    depends_on:
+      - db
+    networks:
+      - filmore_network
+
+  db:
+    image: mysql:8.0
+    container_name: filmore-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: hoang_ho_personal_brand_db
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - filmore_network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: filmore-phpmyadmin
+    restart: unless-stoppedi này vẫn à iện s fontfoncuo
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: wordpress
+      PMA_PASSWORD: wordpress_password
+    depends_on:
+      - db
+    networks:
+      - filmore_network
+
+volumes:
+  wordpress_data:
+  db_data:
+
+networks:
+  filmore_network:
+    driver: bridge

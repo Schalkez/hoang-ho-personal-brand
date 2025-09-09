@@ -16,7 +16,6 @@ services:
     volumes:
       - wordpress_data:/var/www/html
       - ./wp-content:/var/www/html/wp-content
-      - ./uploads:/var/www/html/wp-content/uploads
     depends_on:
       - db
     networks:
@@ -39,7 +38,7 @@ services:
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: filmore-phpmyadmin
-    restart: unless-stoppedi này vẫn à iện s fontfoncuo
+    restart: unless-stopped
     ports:
       - "8081:80"
     environment:

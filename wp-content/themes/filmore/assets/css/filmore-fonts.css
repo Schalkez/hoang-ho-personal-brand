@@ -1,0 +1,70 @@
+/* Filmore Custom Fonts */
+
+@font-face {
+    font-family: 'FilmoreBelleza';
+    src: url('../fonts/FilmoreBelleza-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'FilmoreGotham';
+    src: url('../fonts/FilmoreGotham-Book.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'FilmoreGotham';
+    src: url('../fonts/FilmoreGotham-BookItalic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'FilmoreGotham';
+    src: url('../fonts/FilmoreGotham-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Font Override Classes */
+.filmore-belleza {
+    font-family: 'FilmoreBelleza', serif;
+}
+
+.filmore-gotham {
+    font-family: 'FilmoreGotham', sans-serif;
+}
+
+/* Global Font Application */
+body {
+    font-family: 'FilmoreGotham', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'FilmoreBelleza', serif;
+}
+
+/* Specific overrides for existing classes */
+.title {
+    font-family: 'FilmoreBelleza', serif !important;
+}
+
+.section-title {
+    font-family: 'FilmoreBelleza', serif !important;
+}
+
+/* Override Google Fonts */
+.font-playfair {
+    font-family: 'FilmoreBelleza', serif !important;
+}
+
+.font-inter {
+    font-family: 'FilmoreGotham', sans-serif !important;
+}
+

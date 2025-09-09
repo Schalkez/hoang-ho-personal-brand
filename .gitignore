@@ -13,9 +13,6 @@ wp-config-local.php
 wp-config-production.php
 wp-config-staging.php
 
-# WordPress Uploads (ảnh, file media)
-wp-content/uploads/
-!wp-content/uploads/.gitkeep
 
 # WordPress Plugins (giữ lại plugins cần thiết)
 # wp-content/plugins/
@@ -30,7 +27,6 @@ wp-content/backup-db/
 wp-content/backups/
 wp-content/blogs.dir/
 wp-content/upgrade/
-wp-content/uploads/wpforms/
 
 # WordPress Debug & Logs
 wp-content/debug.log
@@ -98,7 +94,6 @@ flush-*.php
 # WordPress Multisite
 wp-content/blogs.dir/
 wp-content/sites/
-wp-content/uploads/sites/
 
 # WordPress Security
 .htaccess.backup

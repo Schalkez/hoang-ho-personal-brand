@@ -41,8 +41,8 @@ add_action('after_setup_theme', 'filmore_setup');
  * Enqueue scripts and styles
  */
 function filmore_scripts() {
-    // Enqueue Google Fonts
-    wp_enqueue_style('filmore-google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap', array(), null);
+    // Enqueue Filmore Custom Fonts
+    wp_enqueue_style('filmore-custom-fonts', get_template_directory_uri() . '/assets/css/filmore-fonts.css', array(), '1.0.0');
     
     // Enqueue main stylesheet
     wp_enqueue_style('filmore-style', get_stylesheet_uri(), array(), '1.0.0');
@@ -56,7 +56,6 @@ function filmore_scripts() {
     wp_enqueue_style('filmore-custom', get_template_directory_uri() . '/assets/css/custom.css', array(), '1.0.0');
     wp_enqueue_style('filmore-main-style', get_template_directory_uri() . '/assets/css/style.css', array(), '1.0.0');
     wp_enqueue_style('filmore-fonts', get_template_directory_uri() . '/assets/css/fonts.css', array(), '1.0.0');
-    wp_enqueue_style('filmore-google-fonts-override', get_template_directory_uri() . '/assets/css/google-fonts-override.css', array(), '1.0.0');
     wp_enqueue_style('filmore-fontawesome', get_template_directory_uri() . '/assets/css/all.min.css', array(), '1.0.0');
     wp_enqueue_style('filmore-wordpress-overrides', get_template_directory_uri() . '/assets/css/wordpress-overrides.css', array(), '1.0.0');
     

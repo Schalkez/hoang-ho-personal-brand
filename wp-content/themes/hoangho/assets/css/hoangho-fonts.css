@@ -1,0 +1,70 @@
+/* HoangHo Custom Fonts */
+
+@font-face {
+    font-family: 'HoangHoBelleza';
+    src: url('../fonts/HoangHoBelleza-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HoangHoGotham';
+    src: url('../fonts/HoangHoGotham-Book.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HoangHoGotham';
+    src: url('../fonts/HoangHoGotham-BookItalic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'HoangHoGotham';
+    src: url('../fonts/HoangHoGotham-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Font Override Classes */
+.hoangho-belleza {
+    font-family: 'HoangHoBelleza', serif;
+}
+
+.hoangho-gotham {
+    font-family: 'HoangHoGotham', sans-serif;
+}
+
+/* Global Font Application */
+body {
+    font-family: 'HoangHoGotham', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'HoangHoBelleza', serif;
+}
+
+/* Specific overrides for existing classes */
+.title {
+    font-family: 'HoangHoBelleza', serif !important;
+}
+
+.section-title {
+    font-family: 'HoangHoBelleza', serif !important;
+}
+
+/* Override Google Fonts */
+.font-playfair {
+    font-family: 'HoangHoBelleza', serif !important;
+}
+
+.font-inter {
+    font-family: 'HoangHoGotham', sans-serif !important;
+}
+

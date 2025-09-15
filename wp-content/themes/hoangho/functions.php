@@ -25,6 +25,166 @@ function hoangho_clean_output_buffer() {
 add_action('shutdown', 'hoangho_clean_output_buffer');
 
 /**
+ * Increase upload file size limits
+ */
+function hoangho_increase_upload_limits() {
+    ini_set('upload_max_filesize', '50M');
+    ini_set('post_max_size', '50M');
+    ini_set('max_execution_time', 300);
+    ini_set('max_input_time', 300);
+    ini_set('memory_limit', '512M');
+}
+add_action('muplugins_loaded', 'hoangho_increase_upload_limits', 1);
+
+// Override WordPress upload size limit
+function hoangho_upload_size_limit() {
+    return 50 * 1024 * 1024; // 50MB in bytes
+}
+add_filter('upload_size_limit', 'hoangho_upload_size_limit');
+
+// Force PHP settings on admin_init
+function hoangho_force_php_settings() {
+    if (is_admin()) {
+        ini_set('upload_max_filesize', '50M');
+        ini_set('post_max_size', '50M');
+        ini_set('memory_limit', '512M');
+    }
+}
+add_action('admin_init', 'hoangho_force_php_settings', 1);
+
+// Increase image size limits
+function hoangho_increase_image_limits() {
+    // Increase big image size threshold
+    add_filter('big_image_size_threshold', function() {
+        return 4096; // Increase from 2560 to 4096 pixels
+    });
+    
+    // Disable image compression
+    add_filter('jpeg_quality', function() {
+        return 100; // Maximum quality
+    });
+    
+    // Allow larger images
+    add_filter('wp_image_editors', function($editors) {
+        return array('WP_Image_Editor_GD', 'WP_Image_Editor_Imagick');
+    });
+}
+add_action('init', 'hoangho_increase_image_limits');
+
+/**
+ * Handle consultation form submission
+ */
+function hoangho_handle_consultation_signup() {
+    // Start output buffering to catch any unwanted output
+    ob_start();
+    
+    // Verify nonce
+    if (!wp_verify_nonce($_POST['nonce'], 'consultation_signup_nonce')) {
+        ob_end_clean();
+        wp_die('Security check failed');
+    }
+    
+    $name = sanitize_text_field($_POST['name']);
+    $email = sanitize_email($_POST['email']);
+    $brevo_consent = $_POST['brevo_consent'] === '1';
+    $source = sanitize_text_field($_POST['source']);
+    
+    // Validate required fields
+    if (empty($name) || empty($email)) {
+        ob_end_clean();
+        wp_send_json_error('Vui lòng nhập đầy đủ thông tin!');
+    }
+    
+    if (!is_email($email)) {
+        ob_end_clean();
+        wp_send_json_error('Email không hợp lệ!');
+    }
+    
+    // Save to database
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'consultation_leads';
+    
+    // Create table if not exists
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        name varchar(255) NOT NULL,
+        email varchar(255) NOT NULL,
+        brevo_consent tinyint(1) DEFAULT 0,
+        source varchar(100) DEFAULT '',
+        created_at datetime DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id)
+    ) $charset_collate;";
+    
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+    
+    // Insert data
+    $result = $wpdb->insert(
+        $table_name,
+        array(
+            'name' => $name,
+            'email' => $email,
+            'brevo_consent' => $brevo_consent ? 1 : 0,
+            'source' => $source,
+            'created_at' => current_time('mysql')
+        ),
+        array('%s', '%s', '%d', '%s', '%s')
+    );
+    
+    if ($result === false) {
+        ob_end_clean();
+        wp_send_json_error('Có lỗi xảy ra khi lưu thông tin!');
+    }
+    
+    // If user consented, add to Brevo
+    if ($brevo_consent && class_exists('SIB_API_Manager')) {
+        try {
+            // Get default list ID from Brevo settings - use actual list ID
+            $default_list_id = 5; // Use the actual list ID from Brevo (cskh_80days)
+            
+            // Prepare contact info for Brevo - split name into first and last name
+            $name_parts = explode(' ', trim($name), 2);
+            $first_name = $name_parts[0];
+            $last_name = isset($name_parts[1]) ? $name_parts[1] : '';
+            
+            $contact_info = array(
+                'FIRSTNAME' => $first_name,
+                'LASTNAME' => $last_name,
+                'SMS' => '',
+                'WEBSITE' => home_url(),
+                'SOURCE' => 'Website Consultation Form'
+            );
+            
+            // Add contact to Brevo - list_id must be an array
+            $brevo_result = SIB_API_Manager::create_subscriber($email, array($default_list_id), $contact_info, 'simple');
+            
+            if ($brevo_result === 'success') {
+                // Contact added to Brevo successfully
+            } else {
+                // Log error but don't fail the form submission
+                error_log('Brevo integration failed for consultation: ' . $brevo_result);
+            }
+        } catch (Exception $e) {
+            // Log error but don't fail the form submission
+            error_log('Brevo integration error for consultation: ' . $e->getMessage());
+        }
+    }
+    
+    // Send email notification to admin (optional)
+    $admin_email = get_option('admin_email');
+    $subject = 'Đăng ký tư vấn mới từ website';
+    $message = "Tên: $name\nEmail: $email\nNguồn: $source\nĐồng ý nhận email: " . ($brevo_consent ? 'Có' : 'Không');
+    wp_mail($admin_email, $subject, $message);
+    
+    // Clean any output buffer and send success response
+    ob_end_clean();
+    wp_send_json_success('Đăng ký thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.');
+}
+add_action('wp_ajax_consultation_signup', 'hoangho_handle_consultation_signup');
+add_action('wp_ajax_nopriv_consultation_signup', 'hoangho_handle_consultation_signup');
+
+/**
  * Suppress WordPress version check warnings
  */
 function hoangho_suppress_version_check_warnings() {
@@ -96,31 +256,31 @@ add_action('after_setup_theme', 'hoangho_setup');
  */
 function hoangho_scripts() {
     // Enqueue HoangHo Custom Fonts
-    wp_enqueue_style('hoangho-custom-fonts', get_template_directory_uri() . '/assets/css/hoangho-fonts.css', array(), '1.0.0');
+    wp_enqueue_style('hoangho-custom-fonts', get_template_directory_uri() . '/assets/css/hoangho-fonts.css', array(), '1.0.1');
     
     // Enqueue main stylesheet
-    wp_enqueue_style('hoangho-style', get_stylesheet_uri(), array(), '1.0.0');
+    wp_enqueue_style('hoangho-style', get_stylesheet_uri(), array(), '1.0.1');
     
     // Enqueue theme CSS files
-    wp_enqueue_style('hoangho-bootstrap', get_template_directory_uri() . '/assets/css/bootstrap.min.css', array(), '1.0.0');
-    wp_enqueue_style('hoangho-fancybox', get_template_directory_uri() . '/assets/css/jquery.fancybox.min.css', array(), '1.0.0');
-    wp_enqueue_style('hoangho-materialdesign', get_template_directory_uri() . '/assets/css/materialdesignicons.min.css', array(), '1.0.0');
-    wp_enqueue_style('hoangho-aos', get_template_directory_uri() . '/assets/css/aos.css', array(), '1.0.0');
-    wp_enqueue_style('hoangho-swiper', get_template_directory_uri() . '/assets/css/swiper.min.css', array(), '1.0.0');
-    wp_enqueue_style('hoangho-custom', get_template_directory_uri() . '/assets/css/custom.css', array(), '1.0.0');
-    wp_enqueue_style('hoangho-main-style', get_template_directory_uri() . '/assets/css/style.css', array(), '1.0.0');
-    wp_enqueue_style('hoangho-fonts', get_template_directory_uri() . '/assets/css/fonts.css', array(), '1.0.0');
-    wp_enqueue_style('hoangho-fontawesome', get_template_directory_uri() . '/assets/css/all.min.css', array(), '1.0.0');
-    wp_enqueue_style('hoangho-wordpress-overrides', get_template_directory_uri() . '/assets/css/wordpress-overrides.css', array(), '1.0.0');
+    wp_enqueue_style('hoangho-bootstrap', get_template_directory_uri() . '/assets/css/bootstrap.min.css', array(), '1.0.1');
+    wp_enqueue_style('hoangho-fancybox', get_template_directory_uri() . '/assets/css/jquery.fancybox.min.css', array(), '1.0.1');
+    wp_enqueue_style('hoangho-materialdesign', get_template_directory_uri() . '/assets/css/materialdesignicons.min.css', array(), '1.0.1');
+    wp_enqueue_style('hoangho-aos', get_template_directory_uri() . '/assets/css/aos.css', array(), '1.0.1');
+    wp_enqueue_style('hoangho-swiper', get_template_directory_uri() . '/assets/css/swiper.min.css', array(), '1.0.1');
+    wp_enqueue_style('hoangho-custom', get_template_directory_uri() . '/assets/css/custom.css', array(), '1.0.1');
+    wp_enqueue_style('hoangho-main-style', get_template_directory_uri() . '/assets/css/style.css', array(), '1.0.1');
+    wp_enqueue_style('hoangho-fonts', get_template_directory_uri() . '/assets/css/fonts.css', array(), '1.0.1');
+    wp_enqueue_style('hoangho-fontawesome', get_template_directory_uri() . '/assets/css/all.min.css', array(), '1.0.1');
+    wp_enqueue_style('hoangho-wordpress-overrides', get_template_directory_uri() . '/assets/css/wordpress-overrides.css', array(), '1.0.1');
     
     // Enqueue theme JS files
-    wp_enqueue_script('hoangho-jquery', get_template_directory_uri() . '/assets/js/jquery-3.5.1.min.js', array(), '1.0.0', true);
-    wp_enqueue_script('hoangho-bootstrap', get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', array('jquery'), '1.0.0', true);
-    wp_enqueue_script('hoangho-fancybox', get_template_directory_uri() . '/assets/js/jquery.fancybox.min.js', array('jquery'), '1.0.0', true);
-    wp_enqueue_script('hoangho-aos', get_template_directory_uri() . '/assets/js/aos.js', array(), '1.0.0', true);
-    wp_enqueue_script('hoangho-swiper', get_template_directory_uri() . '/assets/js/swiper.min.js', array(), '1.0.0', true);
+    wp_enqueue_script('jquery'); // Use WordPress jQuery
+    wp_enqueue_script('hoangho-bootstrap', get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', array('jquery'), '1.0.1', true);
+    wp_enqueue_script('hoangho-fancybox', get_template_directory_uri() . '/assets/js/jquery.fancybox.min.js', array('jquery'), '1.0.1', true);
+    wp_enqueue_script('hoangho-aos', get_template_directory_uri() . '/assets/js/aos.js', array(), '1.0.1', true);
+    wp_enqueue_script('hoangho-swiper', get_template_directory_uri() . '/assets/js/swiper.min.js', array(), '1.0.1', true);
     // Newsletter script removed - now using Brevo shortcode
-    wp_enqueue_script('hoangho-main', get_template_directory_uri() . '/assets/js/script.js', array('jquery'), '1.0.0', true);
+    wp_enqueue_script('hoangho-main', get_template_directory_uri() . '/assets/js/script.js', array('jquery'), '1.0.1', true);
     
     // Localize script for AJAX and theme variables
     wp_localize_script('hoangho-main', 'hoangho_ajax', array(
@@ -135,187 +295,8 @@ function hoangho_scripts() {
 }
 add_action('wp_enqueue_scripts', 'hoangho_scripts');
 
-/**
- * Create newsletter subscribers table
- */
-function hoangho_create_newsletter_table() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'newsletter_subscribers';
-    
-    $charset_collate = $wpdb->get_charset_collate();
-    
-    $sql = "CREATE TABLE $table_name (
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        email varchar(100) NOT NULL,
-        ip_address varchar(45) NOT NULL,
-        user_agent text,
-        status varchar(20) DEFAULT 'active',
-        source varchar(50) DEFAULT 'website',
-        created_at datetime DEFAULT CURRENT_TIMESTAMP,
-        updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        PRIMARY KEY (id),
-        UNIQUE KEY email (email),
-        KEY ip_address (ip_address),
-        KEY status (status),
-        KEY created_at (created_at)
-    ) $charset_collate;";
-    
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
-}
 
-/**
- * Handle newsletter signup AJAX with security and data collection
- */
-function hoangho_newsletter_signup() {
-    try {
-        // Log the request for debugging
-        if (function_exists('wp_debug_log')) {
-            wp_debug_log('Newsletter signup request received');
-        }
-        
-        // Verify nonce for security
-        if (!wp_verify_nonce($_POST['nonce'], 'newsletter_signup_nonce')) {
-            wp_send_json_error('Bảo mật không hợp lệ!');
-            return;
-        }
-    
-    // Rate limiting - prevent spam
-    $ip_address = hoangho_get_client_ip();
-    $rate_limit_key = 'newsletter_rate_limit_' . md5($ip_address);
-    $rate_limit_count = get_transient($rate_limit_key);
-    
-    if ($rate_limit_count && $rate_limit_count >= 5) {
-        wp_send_json_error('Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau 1 giờ.');
-        return;
-    }
-    
-    if (isset($_POST['email']) && is_email($_POST['email'])) {
-        $email = sanitize_email($_POST['email']);
-        $user_agent = sanitize_text_field(isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
-        $source = sanitize_text_field(isset($_POST['source']) ? $_POST['source'] : 'website');
-        
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'newsletter_subscribers';
-        
-        // Check if email already exists
-        $existing = $wpdb->get_var($wpdb->prepare(
-            "SELECT id FROM $table_name WHERE email = %s", 
-            $email
-        ));
-        
-        if ($existing) {
-            wp_send_json_error('Email này đã được đăng ký newsletter!');
-            return;
-        }
-        
-        // Insert new subscriber with prepared statement (SQL injection protection)
-        $result = $wpdb->insert(
-            $table_name,
-            array(
-                'email' => $email,
-                'ip_address' => $ip_address,
-                'user_agent' => $user_agent,
-                'source' => $source,
-                'status' => 'active'
-            ),
-            array('%s', '%s', '%s', '%s', '%s')
-        );
-        
-        if ($result !== false) {
-            // Set rate limit
-            set_transient($rate_limit_key, ($rate_limit_count ? $rate_limit_count + 1 : 1), HOUR_IN_SECONDS);
-            
-            // Integrate with Brevo plugin if available
-            if (class_exists('SIB_API_Manager')) {
-                try {
-                // Get default list ID from Brevo settings - use actual list ID
-                $general_settings = get_option('sib_main_option', array());
-                $default_list_id = 5; // Use the actual list ID from Brevo (cskh_80days)
-                    
-                    // Log Brevo integration attempt
-                    if (function_exists('wp_debug_log')) {
-                        wp_debug_log("Newsletter signup: Attempting Brevo integration for $email with list ID: $default_list_id");
-                    }
-                    
-                    // Prepare contact info for Brevo
-                    $contact_info = array(
-                        'FIRSTNAME' => '',
-                        'LASTNAME' => '',
-                        'SMS' => '',
-                        'WEBSITE' => home_url(),
-                        'SOURCE' => 'Website Newsletter Form'
-                    );
-                    
-                    // Add contact to Brevo - list_id must be an array
-                    $brevo_result = SIB_API_Manager::create_subscriber($email, array($default_list_id), $contact_info, 'simple');
-                    
-                    // Log detailed result
-                    if (function_exists('wp_debug_log')) {
-                        wp_debug_log("Newsletter signup: Brevo result for $email: " . $brevo_result . " (type: " . gettype($brevo_result) . ")");
-                    }
-                    
-                    if ($brevo_result === 'success') {
-                        // Log successful Brevo integration
-                        if (function_exists('wp_debug_log')) {
-                            wp_debug_log("Newsletter signup: $email successfully added to Brevo list $default_list_id");
-                        }
-                    } else {
-                        // Log Brevo integration failure but don't fail the whole process
-                        if (function_exists('wp_debug_log')) {
-                            wp_debug_log("Newsletter signup: $email added to local DB but failed to add to Brevo: $brevo_result");
-                        }
-                    }
-                } catch (Exception $e) {
-                    // Log error but don't fail the whole process
-                    if (function_exists('wp_debug_log')) {
-                        wp_debug_log("Newsletter signup: Brevo integration error for $email: " . $e->getMessage());
-                    }
-                }
-            } else {
-                // Log that Brevo plugin is not available
-                if (function_exists('wp_debug_log')) {
-                    wp_debug_log("Newsletter signup: Brevo plugin not available for $email");
-                }
-            }
-            
-            // Send confirmation email
-            $subject = 'Đăng ký newsletter thành công - HoangHo';
-            $message = "Xin chào,\n\nCảm ơn bạn đã đăng ký nhận newsletter từ HoangHo Real Estate Development.\n\nBạn sẽ nhận được những thông tin mới nhất về:\n- Dự án bất động sản mới\n- Tin tức thị trường\n- Ưu đãi đặc biệt\n\nTrân trọng,\nĐội ngũ HoangHo";
-            
-            wp_mail($email, $subject, $message);
-            
-            // Log for admin notification (using WordPress logging)
-            if (function_exists('wp_debug_log')) {
-                wp_debug_log("Newsletter signup: $email from IP: $ip_address");
-            }
-            
-            wp_send_json_success('Đăng ký newsletter thành công! Bạn sẽ nhận được email xác nhận.');
-        } else {
-            wp_send_json_error('Có lỗi xảy ra. Vui lòng thử lại sau.');
-        }
-    } else {
-        wp_send_json_error('Email không hợp lệ!');
-    }
-    } catch (Exception $e) {
-        error_log('Newsletter signup error: ' . $e->getMessage());
-        wp_send_json_error('Có lỗi xảy ra: ' . $e->getMessage());
-    }
-}
-add_action('wp_ajax_newsletter_signup', 'hoangho_newsletter_signup');
-add_action('wp_ajax_nopriv_newsletter_signup', 'hoangho_newsletter_signup');
 
-// AJAX handler to clear rate limit for testing
-function hoangho_clear_rate_limit_ajax() {
-    // Clear all rate limit transients
-    global $wpdb;
-    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_newsletter_rate_limit_%'");
-    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_newsletter_rate_limit_%'");
-    
-    wp_send_json_success('Rate limit đã được xóa. Bây giờ bạn có thể test form newsletter!');
-}
-add_action('wp_ajax_clear_rate_limit', 'hoangho_clear_rate_limit_ajax');
-add_action('wp_ajax_nopriv_clear_rate_limit', 'hoangho_clear_rate_limit_ajax');
 
 
 /**
@@ -354,191 +335,16 @@ function hoangho_brevo_admin_notice() {
         
         if ($brevo_status && $brevo_status['plugin_active']) {
             if ($brevo_status['api_configured']) {
-                echo '<div class="notice notice-success"><p><strong>Brevo Integration:</strong> Plugin đã được cấu hình và sẵn sàng nhận email từ form newsletter.</p></div>';
+                echo '<div class="notice notice-success"><p><strong>Brevo Integration:</strong> Plugin đã được cấu hình và sẵn sàng nhận email từ form consultation.</p></div>';
             } else {
                 echo '<div class="notice notice-warning"><p><strong>Brevo Integration:</strong> Plugin đã được cài đặt nhưng chưa được cấu hình API key. <a href="' . admin_url('admin.php?page=sib_page_home') . '">Cấu hình ngay</a></p></div>';
             }
         } else {
-            echo '<div class="notice notice-info"><p><strong>Brevo Integration:</strong> Form newsletter sẽ lưu email vào database local. Để tích hợp với Brevo, hãy cài đặt và cấu hình Brevo plugin.</p></div>';
+            echo '<div class="notice notice-info"><p><strong>Brevo Integration:</strong> Form consultation sẽ chỉ lưu vào database local. Để tích hợp với Brevo, hãy cài đặt và cấu hình Brevo plugin.</p></div>';
         }
     }
 }
 add_action('admin_notices', 'hoangho_brevo_admin_notice');
-
-/**
- * Test Brevo integration with a sample email
- */
-function hoangho_test_brevo_integration() {
-    if (is_admin() && current_user_can('manage_options') && isset($_GET['test_brevo'])) {
-        if (class_exists('SIB_API_Manager')) {
-            $test_email = 'test@example.com';
-            $general_settings = get_option('sib_main_option', array());
-            $default_list_id = isset($general_settings['default_list_id']) ? $general_settings['default_list_id'] : 1;
-            
-            $contact_info = array(
-                'FIRSTNAME' => 'Test',
-                'LASTNAME' => 'User',
-                'SMS' => '',
-                'WEBSITE' => home_url(),
-                'SOURCE' => 'Test Integration'
-            );
-            
-            $result = SIB_API_Manager::create_subscriber($test_email, array($default_list_id), $contact_info, 'simple');
-            
-            if ($result === 'success') {
-                echo '<div class="notice notice-success"><p>✅ Brevo integration test thành công!</p></div>';
-            } else {
-                echo '<div class="notice notice-error"><p>❌ Brevo integration test thất bại: ' . $result . '</p></div>';
-            }
-        } else {
-            echo '<div class="notice notice-error"><p>❌ Brevo plugin chưa được cài đặt hoặc kích hoạt</p></div>';
-        }
-    }
-}
-add_action('admin_notices', 'hoangho_test_brevo_integration');
-
-/**
- * Debug Brevo integration status
- */
-function hoangho_debug_brevo_status() {
-    if (is_admin() && current_user_can('manage_options') && isset($_GET['debug_brevo'])) {
-        echo '<div class="notice notice-info"><p><strong>Brevo Debug Info:</strong></p>';
-        echo '<ul>';
-        echo '<li>SIB_API_Manager class exists: ' . (class_exists('SIB_API_Manager') ? 'Yes' : 'No') . '</li>';
-        echo '<li>SIB_Manager class exists: ' . (class_exists('SIB_Manager') ? 'Yes' : 'No') . '</li>';
-        if (class_exists('SIB_Manager')) {
-            echo '<li>SIB_Manager::is_api_key_set() method exists: ' . (method_exists('SIB_Manager', 'is_api_key_set') ? 'Yes' : 'No') . '</li>';
-            echo '<li>API key is set: ' . (SIB_Manager::is_api_key_set() ? 'Yes' : 'No') . '</li>';
-        }
-        echo '<li>sib_api_key_v3 option: ' . (get_option('sib_api_key_v3') ? 'Set' : 'Not set') . '</li>';
-        echo '<li>sib_default_list_id option: ' . get_option('sib_default_list_id', 'Not set') . '</li>';
-        echo '</ul></div>';
-    }
-}
-add_action('admin_notices', 'hoangho_debug_brevo_status');
-
-/**
- * Test Brevo integration with simple email
- */
-function hoangho_simple_brevo_test() {
-    if (is_admin() && current_user_can('manage_options') && isset($_GET['test_simple_brevo'])) {
-        if (class_exists('SIB_API_Manager')) {
-            $test_email = 'test@example.com';
-            $general_settings = get_option('sib_main_option', array());
-            $default_list_id = isset($general_settings['default_list_id']) ? $general_settings['default_list_id'] : 1;
-            
-            $contact_info = array(
-                'FIRSTNAME' => 'Test',
-                'LASTNAME' => 'User',
-                'SMS' => '',
-                'WEBSITE' => home_url(),
-                'SOURCE' => 'Simple Test'
-            );
-            
-            try {
-                $result = SIB_API_Manager::create_subscriber($test_email, array($default_list_id), $contact_info, 'simple');
-                
-                if ($result === 'success') {
-                    echo '<div class="notice notice-success"><p>✅ Simple Brevo test thành công!</p></div>';
-                } else {
-                    echo '<div class="notice notice-error"><p>❌ Simple Brevo test thất bại: ' . $result . '</p></div>';
-                }
-            } catch (Exception $e) {
-                echo '<div class="notice notice-error"><p>❌ Simple Brevo test error: ' . $e->getMessage() . '</p></div>';
-            }
-        } else {
-            echo '<div class="notice notice-error"><p>❌ SIB_API_Manager class không tồn tại</p></div>';
-        }
-    }
-}
-add_action('admin_notices', 'hoangho_simple_brevo_test');
-
-/**
- * Clear rate limit cache for testing
- */
-function hoangho_clear_rate_limit() {
-    if (is_admin() && current_user_can('manage_options') && isset($_GET['clear_rate_limit'])) {
-        // Clear all rate limit transients
-        global $wpdb;
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_newsletter_rate_limit_%'");
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_newsletter_rate_limit_%'");
-        
-        echo '<div class="notice notice-success"><p>✅ Đã xóa tất cả rate limit cache. Bây giờ bạn có thể test form newsletter!</p></div>';
-    }
-}
-add_action('admin_notices', 'hoangho_clear_rate_limit');
-
-/**
- * Debug Brevo integration in detail
- */
-function hoangho_debug_brevo_detailed() {
-    if (is_admin() && current_user_can('manage_options') && isset($_GET['debug_brevo_detailed'])) {
-        echo '<div class="notice notice-info"><p><strong>Brevo Detailed Debug:</strong></p>';
-        
-        // Check if classes exist
-        echo '<h4>1. Class Check:</h4>';
-        echo '<ul>';
-        echo '<li>SIB_API_Manager: ' . (class_exists('SIB_API_Manager') ? '✅ Exists' : '❌ Not found') . '</li>';
-        echo '<li>SIB_Manager: ' . (class_exists('SIB_Manager') ? '✅ Exists' : '❌ Not found') . '</li>';
-        echo '</ul>';
-        
-        // Check API key
-        echo '<h4>2. API Key Check:</h4>';
-        if (class_exists('SIB_Manager')) {
-            echo '<ul>';
-            echo '<li>is_api_key_set(): ' . (SIB_Manager::is_api_key_set() ? '✅ Yes' : '❌ No') . '</li>';
-            echo '<li>sib_api_key_v3: ' . (get_option('sib_api_key_v3') ? '✅ Set' : '❌ Not set') . '</li>';
-            echo '</ul>';
-        }
-        
-        // Check list ID
-        echo '<h4>3. List ID Check:</h4>';
-        $general_settings = get_option('sib_main_option', array());
-        $default_list_id = isset($general_settings['default_list_id']) ? $general_settings['default_list_id'] : 1;
-        echo '<ul>';
-        echo '<li>Default List ID: ' . $default_list_id . '</li>';
-        echo '<li>List ID Type: ' . gettype($default_list_id) . '</li>';
-        echo '<li>General Settings: ' . print_r($general_settings, true) . '</li>';
-        echo '</ul>';
-        
-        // Test API connection
-        echo '<h4>4. API Connection Test:</h4>';
-        if (class_exists('SIB_API_Manager') && class_exists('SIB_Manager') && SIB_Manager::is_api_key_set()) {
-            try {
-                $test_email = 'test-debug@example.com';
-                $contact_info = array(
-                    'FIRSTNAME' => 'Test',
-                    'LASTNAME' => 'Debug',
-                    'SMS' => '',
-                    'WEBSITE' => home_url(),
-                    'SOURCE' => 'Debug Test'
-                );
-                
-                echo '<p>Testing with email: ' . $test_email . '</p>';
-                echo '<p>List ID: ' . $default_list_id . ' (as array: [' . $default_list_id . '])</p>';
-                
-                $result = SIB_API_Manager::create_subscriber($test_email, array($default_list_id), $contact_info, 'simple');
-                
-                echo '<p>Result: ' . $result . '</p>';
-                echo '<p>Result Type: ' . gettype($result) . '</p>';
-                
-                if ($result === 'success') {
-                    echo '<p style="color: green;">✅ API Test Successful!</p>';
-                } else {
-                    echo '<p style="color: red;">❌ API Test Failed: ' . $result . '</p>';
-                }
-                
-            } catch (Exception $e) {
-                echo '<p style="color: red;">❌ API Test Exception: ' . $e->getMessage() . '</p>';
-            }
-        } else {
-            echo '<p style="color: red;">❌ Cannot test API - missing requirements</p>';
-        }
-        
-        echo '</div>';
-    }
-}
-add_action('admin_notices', 'hoangho_debug_brevo_detailed');
 
 /**
  * Get client IP address securely
@@ -558,132 +364,7 @@ function hoangho_get_client_ip() {
     return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unknown';
 }
 
-/**
- * Create table on theme activation
- */
-function hoangho_theme_activation() {
-    hoangho_create_newsletter_table();
-}
-add_action('after_switch_theme', 'hoangho_theme_activation');
 
-/**
- * Create table immediately if not exists
- */
-function hoangho_check_newsletter_table() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'newsletter_subscribers';
-    
-    // Check if table exists
-    $table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") == $table_name;
-    
-    if (!$table_exists) {
-        hoangho_create_newsletter_table();
-    }
-}
-add_action('init', 'hoangho_check_newsletter_table');
-
-/**
- * Add admin menu for newsletter subscribers
- */
-function hoangho_newsletter_admin_menu() {
-    add_menu_page(
-        'Newsletter Subscribers',
-        'Newsletter',
-        'manage_options',
-        'newsletter-subscribers',
-        'hoangho_newsletter_admin_page',
-        'dashicons-email-alt',
-        30
-    );
-}
-add_action('admin_menu', 'hoangho_newsletter_admin_menu');
-
-/**
- * Admin page for newsletter subscribers
- */
-function hoangho_newsletter_admin_page() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'newsletter_subscribers';
-    
-    // Get subscribers
-    $subscribers = $wpdb->get_results("SELECT * FROM $table_name ORDER BY created_at DESC");
-    $total_count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
-    $active_count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name WHERE status = 'active'");
-    
-    // Check Brevo integration status
-    $brevo_status = hoangho_check_brevo_integration();
-    
-    ?>
-    <div class="wrap">
-        <h1>Newsletter Subscribers</h1>
-        
-        <div class="notice notice-info">
-            <p><strong>Tổng số subscribers:</strong> <?php echo $total_count; ?> | <strong>Active:</strong> <?php echo $active_count; ?></p>
-        </div>
-        
-        <?php if ($brevo_status): ?>
-        <div class="notice <?php echo $brevo_status['api_configured'] ? 'notice-success' : 'notice-warning'; ?>">
-            <p><strong>Brevo Integration Status:</strong> 
-                <?php if ($brevo_status['plugin_active']): ?>
-                    <?php if ($brevo_status['api_configured']): ?>
-                        ✅ Plugin đã được cấu hình và sẵn sàng nhận email từ form newsletter
-                    <?php else: ?>
-                        ⚠️ Plugin đã được cài đặt nhưng chưa được cấu hình API key. 
-                        <a href="<?php echo admin_url('admin.php?page=sib_page_home'); ?>">Cấu hình ngay</a>
-                    <?php endif; ?>
-                <?php else: ?>
-                    ❌ Brevo plugin chưa được cài đặt hoặc kích hoạt
-                <?php endif; ?>
-            </p>
-        </div>
-        <?php endif; ?>
-        
-        <table class="wp-list-table widefat fixed striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Email</th>
-                    <th>IP Address</th>
-                    <th>Source</th>
-                    <th>Status</th>
-                    <th>Created At</th>
-                    <th>User Agent</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if ($subscribers): ?>
-                    <?php foreach ($subscribers as $subscriber): ?>
-                        <tr>
-                            <td><?php echo $subscriber->id; ?></td>
-                            <td><?php echo esc_html($subscriber->email); ?></td>
-                            <td><?php echo esc_html($subscriber->ip_address); ?></td>
-                            <td><?php echo esc_html($subscriber->source); ?></td>
-                            <td>
-                                <span class="status-<?php echo $subscriber->status; ?>">
-                                    <?php echo ucfirst($subscriber->status); ?>
-                                </span>
-                            </td>
-                            <td><?php echo date('d/m/Y H:i', strtotime($subscriber->created_at)); ?></td>
-                            <td title="<?php echo esc_attr($subscriber->user_agent); ?>">
-                                <?php echo esc_html(substr($subscriber->user_agent, 0, 50)) . (strlen($subscriber->user_agent) > 50 ? '...' : ''); ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="7">Chưa có subscriber nào.</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-        
-        <style>
-            .status-active { color: #46b450; font-weight: bold; }
-            .status-inactive { color: #dc3232; font-weight: bold; }
-        </style>
-    </div>
-    <?php
-}
 
 /**
  * Register widget areas
@@ -827,4 +508,216 @@ function hoangho_fix_permalinks() {
     $wp_rewrite->flush_rules();
 }
 add_action('after_switch_theme', 'hoangho_fix_permalinks');
+
+/**
+ * Default menu fallback for English - chỉ hiển thị các trang hiện có
+ */
+function hoangho_default_menu_en() {
+    echo '<ul class="main-menu">';
+    echo '<li class="item"><a href="' . home_url('/en/') . '" class="item-link">HOME</a></li>';
+    echo '<li class="item"><a href="' . home_url('/en/legal-documents/') . '" class="item-link">LEGAL DOCUMENTS</a></li>';
+    echo '<li class="item"><a href="' . home_url('/en/residential-portfolio/') . '" class="item-link">APARTMENT COLLECTION</a></li>';
+    echo '<li class="item"><a href="#" class="item-link" data-toggle="modal" data-target="#consultationModal">REGISTER FOR CONSULTATION</a></li>';
+    echo '</ul>';
+}
+
+/**
+ * Get language switcher URL - chuyển sang trang tương ứng của ngôn ngữ khác
+ */
+function hoangho_get_language_url($target_lang) {
+    $current_url = $_SERVER['REQUEST_URI'];
+    $current_path = trim(parse_url($current_url, PHP_URL_PATH), '/');
+    
+    // Mapping giữa các trang
+    $page_mapping = array(
+        // Vietnamese to English
+        'phap-ly-du-an' => 'en/legal-documents',
+        'bo-suu-tap-can-ho' => 'en/residential-portfolio',
+        'en' => '',
+        
+        // English to Vietnamese  
+        'en/legal-documents' => 'phap-ly-du-an',
+        'en/residential-portfolio' => 'bo-suu-tap-can-ho',
+        'en' => '',
+        '' => 'en'
+    );
+    
+    if ($target_lang === 'vi') {
+        // Chuyển sang tiếng Việt
+        if (isset($page_mapping[$current_path])) {
+            $vi_path = $page_mapping[$current_path];
+            return $vi_path ? home_url('/' . $vi_path . '/') : home_url();
+        }
+        return home_url();
+    } else {
+        // Chuyển sang tiếng Anh
+        if (isset($page_mapping[$current_path])) {
+            $en_path = $page_mapping[$current_path];
+            return $en_path ? home_url('/' . $en_path . '/') : home_url('/en/');
+        }
+        return home_url('/en/');
+    }
+}
+
+/**
+ * Check if current page is English page
+ */
+function hoangho_is_english_page() {
+    $current_url = $_SERVER['REQUEST_URI'];
+    $current_path = trim(parse_url($current_url, PHP_URL_PATH), '/');
+    return strpos($current_path, 'en') === 0 || $current_path === 'en';
+}
+
+/**
+ * Add custom rewrite rules for English pages with /en prefix
+ */
+function hoangho_add_english_rewrite_rules() {
+    // Add specific rewrite rules for each English page
+    add_rewrite_rule(
+        '^en/legal-documents/?$',
+        'index.php?pagename=legal-documents&hoangho_english=1',
+        'top'
+    );
+    
+    add_rewrite_rule(
+        '^en/residential-portfolio/?$',
+        'index.php?pagename=residential-portfolio&hoangho_english=1',
+        'top'
+    );
+    
+    add_rewrite_rule(
+        '^en/?$',
+        'index.php?pagename=en&hoangho_english=1',
+        'top'
+    );
+}
+add_action('init', 'hoangho_add_english_rewrite_rules');
+
+/**
+ * Add custom query vars for English routes
+ */
+function hoangho_add_query_vars($vars) {
+    $vars[] = 'hoangho_english';
+    return $vars;
+}
+add_filter('query_vars', 'hoangho_add_query_vars');
+
+/**
+ * Template redirect for English pages - force 404 for invalid routes
+ */
+function hoangho_template_redirect() {
+    // Check if this is an English route
+    if (get_query_var('hoangho_english')) {
+        $pagename = get_query_var('pagename');
+        
+        // Valid English routes mapping
+        $valid_routes = array(
+            'en' => 'page-en.php',
+            'legal-documents' => 'page-legal-en.php',
+            'residential-portfolio' => 'page-products-en.php'
+        );
+        
+        // Check if current page is valid
+        if (isset($valid_routes[$pagename])) {
+            $page = get_page_by_path($pagename);
+            
+            if ($page) {
+                // Set up proper WordPress query
+                global $wp_query;
+                $wp_query->is_page = true;
+                $wp_query->is_singular = true;
+                $wp_query->is_404 = false;
+                $wp_query->queried_object = $page;
+                $wp_query->queried_object_id = $page->ID;
+                $wp_query->post_count = 1;
+                $wp_query->posts = array($page);
+                $wp_query->current_post = 0;
+                $wp_query->post = $page;
+                
+                // Include the template
+                include(get_template_directory() . '/' . $valid_routes[$pagename]);
+                exit;
+            }
+        }
+        
+        // If we reach here, it's an invalid /en/ route - force 404
+        global $wp_query;
+        $wp_query->set_404();
+        status_header(404);
+        nocache_headers();
+        
+        // Include our custom 404 template
+        include(get_template_directory() . '/404.php');
+        exit;
+    }
+}
+add_action('template_redirect', 'hoangho_template_redirect');
+
+/**
+ * Template include filter for English pages
+ */
+function hoangho_template_include($template) {
+    // Check if this is an English route
+    if (get_query_var('hoangho_english')) {
+        $pagename = get_query_var('pagename');
+        
+        // Valid English routes mapping
+        $valid_routes = array(
+            'en' => 'page-en.php',
+            'legal-documents' => 'page-legal-en.php',
+            'residential-portfolio' => 'page-products-en.php'
+        );
+        
+        if (isset($valid_routes[$pagename])) {
+            $new_template = get_template_directory() . '/' . $valid_routes[$pagename];
+            if (file_exists($new_template)) {
+                return $new_template;
+            }
+        }
+    }
+    
+    return $template;
+}
+add_filter('template_include', 'hoangho_template_include');
+
+/**
+ * Flush rewrite rules when theme is activated
+ */
+function hoangho_flush_rewrite_rules() {
+    hoangho_add_english_rewrite_rules();
+    flush_rewrite_rules();
+}
+add_action('after_switch_theme', 'hoangho_flush_rewrite_rules');
+
+
+/**
+ * Fix permalinks for English pages to use /en/ prefix
+ */
+function hoangho_fix_english_permalinks($permalink, $post) {
+    // Check if $post is an object or ID
+    if (is_object($post)) {
+        $post_obj = $post;
+    } elseif (is_numeric($post)) {
+        $post_obj = get_post($post);
+        if (!$post_obj) return $permalink;
+    } else {
+        return $permalink;
+    }
+    
+    if ($post_obj->post_type === 'page') {
+        $slug = $post_obj->post_name;
+        
+        // Check if it's an English page
+        if (strpos($slug, 'en-') === 0) {
+            $english_slug = str_replace('en-', '', $slug);
+            $permalink = home_url('/en/' . $english_slug . '/');
+        } elseif ($slug === 'en') {
+            $permalink = home_url('/en/');
+        }
+    }
+    
+    return $permalink;
+}
+add_filter('post_link', 'hoangho_fix_english_permalinks', 10, 2);
+add_filter('page_link', 'hoangho_fix_english_permalinks', 10, 2);
 ?>

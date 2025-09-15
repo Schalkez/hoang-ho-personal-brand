@@ -16,6 +16,8 @@ services:
     volumes:
       - wordpress_data:/var/www/html
       - ./wp-content:/var/www/html/wp-content
+      - ./.htaccess:/var/www/html/.htaccess
+      - ./php.ini:/usr/local/etc/php/conf.d/uploads.ini
     depends_on:
       - db
     networks:

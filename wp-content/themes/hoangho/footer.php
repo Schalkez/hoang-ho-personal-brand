@@ -1,68 +1,120 @@
-<footer class="section section-footer" data-hash="footer" data-toggle-theme="white" style="margin-top: 20px;">
+<footer class="section section-footer" data-hash="footer" data-toggle-theme="white">
     <div class="container">
         <div class="content">
-            <div class="row">
+            <div class="text-center mb-3">
+                <a href="<?php echo home_url(); ?>" class="logo-container">
+                    <img src="<?php echo content_url(); ?>/uploads/2025/09/LogoHoangvubro.webp" class="logo" alt="MEYPEARL" />
+                </a>
+            </div>
+            <div class="row d-flex align-items-start g-2">
                 <div class="col-lg-9 col-md-6 mb-sm-3">
-                    <a href="<?php echo home_url(); ?>" class="logo-container">
-                        <img src="<?php echo content_url(); ?>/uploads/2020/07/logo-white.svg" class="logo" alt="HoangHo Real Estate Development" />
-                    </a>
                     <div class="row">
                         <div class="col-lg-5 mb-sm-3">
                             <p>
-                                <strong>CÔNG TY CP PHÁT TRIỂN BẤT ĐỘNG SẢN HOANGHO</strong><br />
-                                357-359 An Dương Vương, Phường Chợ Quán, Thành phố Hồ Chí Minh
+                                <strong>CÔNG TY TNHH TM&DV HOÀNG VŨ BRO</strong><br />
+                                127 Kim Phượng, Khu dân cư và đô thị cao cấp Hưng Phát, Đặc khu Phú Quốc, Tỉnh An Giang
                             </p>
                         </div>
                         <div class="col-lg-2 mb-sm-3">
                             <p>
                                 <strong>Liên hệ</strong><br />
-                                <a href="tel:+84 28 3829 9999">+84 28 3829 9999</a>
+                                <a href="tel:+84921010111">+84 921 010 111</a>
                             </p>
                         </div>
                         <div class="col-lg-2 mb-sm-3">
                             <p>
                                 <strong>Email</strong><br />
-                                <a href="mailto:info@hoangho.com.vn">info@hoangho.com.vn</a>
+                                <a href="mailto:info@hoangvubro.vn">info@hoangvubro.vn</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row mt-3 mb-3">
+                        <div class="col-10">
+                            <p style="font-size: 12px; line-height: 1.6; color: #ccc; margin-bottom: 0;">
+                                Chúng tôi không chỉ giúp bạn mua một bất động sản, chúng tôi còn đồng hành cùng bạn trên hành trình tạo ra lợi nhuận và gia tăng giá trị tài sản một cách bền vững. Từ việc tìm kiếm những sản phẩm tiềm năng, cam kết giải pháp chốt lời hiệu quả bằng cách tìm kiếm người mua mới, cho đến việc hợp tác cùng đơn vị vận hành uy tín để khai thác dòng tiền ổn định cho những khách hàng muốn kinh doanh. Chúng tôi đảm bảo bất động sản của bạn không chỉ là một khoản đầu tư, mà còn là một tài sản có giá trị thực, đáp ứng nhu cầu ở hoặc kinh doanh trong tương lai.
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <p class="mb-0"><strong>Newsletter</strong></p>
-                    <div class="submit-form">
-                        <div class="wpcf7 js" id="wpcf7-f4132-o1" lang="vi-VN" dir="ltr" data-wpcf7-id="4132">
-                            <div class="screen-reader-response"><p role="status" aria-live="polite" aria-atomic="true"></p> <ul></ul></div>
-                            <form action="/#wpcf7-f4132-o1" method="post" class="wpcf7-form init" aria-label="Contact form" novalidate="novalidate" data-status="init" onsubmit="return false;">
-                                <fieldset class="hidden-fields-container">
-                                    <input type="hidden" name="_wpcf7" value="4132">
-                                    <input type="hidden" name="_wpcf7_version" value="6.1.1">
-                                    <input type="hidden" name="_wpcf7_locale" value="vi_VN">
-                                    <input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f4132-o1">
-                                    <input type="hidden" name="_wpcf7_container_post" value="0">
-                                    <input type="hidden" name="_wpcf7_posted_data_hash" value="">
-                                </fieldset>
-                                <div class="group-input">
-                                    <p>
-                                        <span class="wpcf7-form-control-wrap" data-name="your-email">
-                                            <input size="40" maxlength="400" class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email input" autocomplete="email" aria-required="true" aria-invalid="false" placeholder="Sign up for keeping in touch to us" value="" type="email" name="your-email" id="newsletter-email">
-                                        </span>
-                                        <button class="btn-submit wpcf7-form-control wpcf7-submit" type="button" id="newsletter-submit-btn">
-                                            <img src="https://filmore.com.vn/wp-content/themes/filmore/assets/images/icons/next.svg" data-lazy-src="https://filmore.com.vn/wp-content/themes/filmore/assets/images/icons/next.svg" data-ll-status="loaded" class="entered lazyloaded">
-                                            <noscript><img src="https://filmore.com.vn/wp-content/themes/filmore/assets/images/icons/next.svg" /></noscript>
-                                        </button>
-                                    </p>
-                                </div>
-                                <p style="display: none !important;" class="akismet-fields-container" data-prefix="_wpcf7_ak_">
-                                    <label>Δ<textarea name="_wpcf7_ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label>
-                                    <input type="hidden" id="ak_js_1" name="_wpcf7_ak_js" value="1757520921941">
-                                    <script>document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script>
-                                </p>
-                                <div class="wpcf7-response-output" aria-hidden="true"></div>
-                            </form>
-                        </div>
+                    <div class="text-center mb-3">
+                        <button class="btn btn-primary btn-consultation w-100" data-toggle="modal" data-target="#consultationModal" style="background: linear-gradient(135deg, #DDC19A, #C4A882); border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; color: #2C3E50; font-size: 14px; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(221, 193, 154, 0.3); transform: translateY(0);">
+                            <span style="position: relative; z-index: 2; transition: all 0.3s ease;">ĐĂNG KÝ TƯ VẤN</span>
+                            <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(135deg, #C4A882, #DDC19A); transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); z-index: 1;"></div>
+                        </button>
                     </div>
                     <style>
                     /* INLINE CSS - ULTRA HIGH PRIORITY */
+                    
+                    /* Consultation Button Hover Effects */
+                    .btn-consultation:hover {
+                        transform: translateY(-3px) !important;
+                        box-shadow: 0 8px 25px rgba(221, 193, 154, 0.5) !important;
+                        background: linear-gradient(135deg, #E8D4B0, #D4B896) !important;
+                    }
+                    
+                    .btn-consultation:hover > div {
+                        left: 0 !important;
+                    }
+                    
+                    .btn-consultation:hover span {
+                        color: #1A252F !important;
+                        text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+                    }
+                    
+                    .btn-consultation:active {
+                        transform: translateY(-1px) !important;
+                        box-shadow: 0 4px 15px rgba(221, 193, 154, 0.4) !important;
+                    }
+                    
+                    /* Modal Button Hover Effects */
+                    .btn-consultation-modal:hover {
+                        transform: translateY(-3px) !important;
+                        box-shadow: 0 8px 25px rgba(221, 193, 154, 0.5) !important;
+                        background: linear-gradient(135deg, #E8D4B0, #D4B896) !important;
+                    }
+                    
+                    .btn-consultation-modal:hover > div {
+                        left: 0 !important;
+                    }
+                    
+                    .btn-consultation-modal:hover span {
+                        color: #1A252F !important;
+                        text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+                    }
+                    
+                    .btn-consultation-modal:active {
+                        transform: translateY(-1px) !important;
+                        box-shadow: 0 4px 15px rgba(221, 193, 154, 0.4) !important;
+                    }
+                    
+                    /* Investment Button Hover Effects */
+                    .btn-consultation-investment:hover {
+                        transform: translateY(-3px) !important;
+                        box-shadow: 0 8px 25px rgba(221, 193, 154, 0.5) !important;
+                        background: linear-gradient(135deg, #E8D4B0, #D4B896) !important;
+                    }
+                    
+                    .btn-consultation-investment:hover > div {
+                        left: 0 !important;
+                    }
+                    
+                    .btn-consultation-investment:hover span {
+                        color: #1A252F !important;
+                        text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+                    }
+                    
+                    .btn-consultation-investment:active {
+                        transform: translateY(-1px) !important;
+                        box-shadow: 0 4px 15px rgba(221, 193, 154, 0.4) !important;
+                    }
+                    
+                    /* Remove outline from modal inputs */
+                    #consultationForm input:focus,
+                    #consultationForm input:active {
+                        outline: none !important;
+                        box-shadow: none !important;
+                    }
                     
                     /* Footer font size and family adjustments for each section */
                     .section-footer { 
@@ -99,215 +151,343 @@
                         font-family: 'HoangHoGotham', sans-serif !important; 
                     }
                     
-                    .submit-form .wpcf7 { margin: 0 !important; padding: 0 !important; }
-                    .submit-form .wpcf7-form { margin: 0 !important; padding: 0 !important; }
-                    .submit-form .group-input { display: block !important; }
-                    .submit-form .group-input p { position: relative !important; margin: 0 !important; display: flex !important; align-items: center !important; }
-                    .submit-form .wpcf7-form-control-wrap { position: relative !important; margin: 0 !important; flex: 1 !important; }
-                    .submit-form .wpcf7-form-control-wrap input[type="email"] { 
-                        width: 100% !important; 
-                        padding: 0 !important; 
-                        border: none !important; 
-                        border-bottom: 1px solid #fff !important; 
-                        border-radius: 0 !important; 
-                        font-size: 14px !important; 
-                        font-family: 'HoangHoGotham', sans-serif !important;
-                        background: transparent !important; 
-                        color: #fff !important; 
-                        outline: none !important; 
-                        transition: border-color 0.3s ease !important; 
-                        box-sizing: border-box !important; 
-                        margin: 0 !important; 
-                        height: 30px !important;
+                    
+                    /* Banner Enhancement - Remove overlay completely for maximum brightness */
+                    .banner-slider:hover .item::before {
+                        opacity: 0 !important; /* Remove overlay completely */
                     }
-                    .submit-form .wpcf7-form-control-wrap input[type="email"]:focus { border-bottom-color: #007cba !important; }
-                    .submit-form .wpcf7-form-control-wrap input[type="email"]::placeholder { color: #ccc !important; font-style: normal !important; font-family: 'HoangHoGotham', sans-serif !important; font-size: 12px !important; }
-                    .submit-form .btn-submit { 
-                        position: absolute !important; 
-                        right: 0 !important; 
-                        top: 50% !important; 
-                        transform: translateY(-50%) !important; 
-                        width: 25px !important; 
-                        height: 25px !important; 
-                        background: none !important; 
-                        border: none !important; 
-                        cursor: pointer !important; 
-                        padding: 0 !important; 
-                        margin: 0 !important; 
-                        display: flex !important; 
-                        align-items: center !important; 
-                        justify-content: center !important; 
-                        visibility: visible !important;
-                        opacity: 1 !important;
-                        z-index: 999 !important;
+                    
+                    /* Unified liquid background for both title and description - no layout shift */
+                    .banner-slider .item .container {
+                        padding: 25px 30px !important; /* Fixed padding to prevent layout shift */
+                        border-radius: 30px !important;
+                        transition: all 0.2s ease !important;
                     }
-                    .submit-form .btn-submit img { 
-                        width: 16px !important; 
-                        height: 16px !important; 
-                        object-fit: contain !important; 
-                        display: block !important;
-                        visibility: visible !important;
-                        opacity: 1 !important;
+                    
+                    .banner-slider .item .container:hover,
+                    .banner-slider .item .container.hover-active {
+                        background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.08) 30%, rgba(0, 0, 0, 0.04) 60%, rgba(0, 0, 0, 0.02) 80%, transparent 100%) !important;
+                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+                        backdrop-filter: blur(4px) saturate(1.2) brightness(1.05) !important;
                     }
-                    .submit-form .hidden-fields-container, .submit-form .akismet-fields-container, .submit-form .screen-reader-response { display: none !important; }
-                    /* Force button to be visible */
-                    .submit-form .wpcf7-submit, .submit-form .wpcf7-form-control.wpcf7-submit { display: flex !important; visibility: visible !important; opacity: 1 !important; }
-                    .submit-form .wpcf7-response-output { margin-top: 10px !important; padding: 10px !important; border-radius: 4px !important; font-size: 14px !important; }
-                    .submit-form .wpcf7-response-output.wpcf7-mail-sent-ok { background-color: #d4edda !important; color: #155724 !important; border: 1px solid #c3e6cb !important; }
-                    .submit-form .wpcf7-response-output.wpcf7-validation-errors, .submit-form .wpcf7-response-output.wpcf7-mail-sent-ng { background-color: #f8d7da !important; color: #721c24 !important; border: 1px solid #f5c6cb !important; }
+                    
+                    /* Modern Box Style cho Value Items - Override style.css */
+                    .section-we-are .value-item,
+                    section.section-we-are .description .value-item,
+                    .value-item {
+                        background: transparent !important;
+                        border: none !important;
+                        border-radius: 0 !important;
+                        padding: 0 !important;
+                        position: relative !important;
+                        transition: all 0.3s ease !important;
+                        margin-bottom: 0 !important;
+                        width: 450px !important;
+                        flex-shrink: 0 !important;
+                        display: flex !important;
+                        align-items: flex-start !important;
+                        box-shadow: none !important;
+                        overflow: visible !important;
+                        gap: 20px !important;
+                    }
+                    
+                    /* Tắt hiệu ứng line di chuyển */
+                    .section-we-are .value-item::before,
+                    section.section-we-are .description .value-item::before {
+                        content: none !important;
+                        display: none !important;
+                    }
+                    
+                    .value-item::before {
+                        content: '' !important;
+                        position: absolute !important;
+                        left: -4px !important;
+                        top: 0 !important;
+                        bottom: 0 !important;
+                        width: 4px !important;
+                        background: linear-gradient(180deg, 
+                            #DDC19A 0%, 
+                            rgba(221, 193, 154, 0.3) 50%, 
+                            transparent 100%) !important;
+                        opacity: 0 !important;
+                        transition: opacity 0.4s ease !important;
+                    }
+                    
+                    .section-we-are .value-item:hover,
+                    section.section-we-are .description .value-item:hover,
+                    .value-item:hover {
+                        transform: translateY(-3px) !important;
+                        box-shadow: none !important;
+                    }
+                    
+                    .section-we-are .value-item:hover .value-number,
+                    section.section-we-are .description .value-item:hover .value-number,
+                    .value-item:hover .value-number {
+                        background: #DDC19A !important;
+                        transform: scale(1.05) !important;
+                    }
+                    
+                    
+                    .section-we-are .value-item .value-number,
+                    section.section-we-are .description .value-item .value-number,
+                    .value-number {
+                        background: #2C3E50 !important;
+                        color: white !important;
+                        font-size: 18px !important;
+                        font-weight: 600 !important;
+                        margin-bottom: 0 !important;
+                        font-family: 'Inter', sans-serif !important;
+                        letter-spacing: 0 !important;
+                        text-transform: none !important;
+                        position: relative !important;
+                        transition: all 0.3s ease !important;
+                        width: 50px !important;
+                        height: 50px !important;
+                        border-radius: 8px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        flex-shrink: 0 !important;
+                        box-shadow: 0 2px 8px rgba(44, 62, 80, 0.2) !important;
+                    }
+                    
+                    .value-item:hover .value-number {
+                        color: #2C3E50 !important;
+                        font-weight: 400 !important;
+                    }
+                    
+                    .section-we-are .value-item .value-text,
+                    section.section-we-are .description .value-item .value-text,
+                    .value-text {
+                        font-size: 16px !important;
+                        line-height: 1.6 !important;
+                        color: #333 !important;
+                        font-weight: 400 !important;
+                        font-family: 'Inter', sans-serif !important;
+                        transition: all 0.3s ease !important;
+                        margin: 0 !important;
+                        flex: 1 !important;
+                    }
+                    
+                    .value-item:hover .value-text {
+                        color: #1a252f !important;
+                        font-weight: 400 !important;
+                    }
+                    
+                    /* Minimalist cho Detail Items */
+                    .detail-item {
+                        background: transparent !important;
+                        border: none !important;
+                        border-radius: 0 !important;
+                        padding: 30px 0 !important;
+                        margin-bottom: 0 !important;
+                        position: relative !important;
+                        transition: all 0.3s ease !important;
+                        border-bottom: 1px solid rgba(221, 193, 154, 0.1) !important;
+                    }
+                    
+                    .detail-item:last-child {
+                        border-bottom: none !important;
+                    }
+                    
+                    .detail-item:hover {
+                        transform: translateX(6px) !important;
+                        border-bottom-color: #DDC19A !important;
+                    }
+                    
+                    .detail-label {
+                        font-size: 11px !important;
+                        font-weight: 400 !important;
+                        color: #999 !important;
+                        text-transform: uppercase !important;
+                        letter-spacing: 3px !important;
+                        margin-bottom: 8px !important;
+                        font-family: 'Inter', sans-serif !important;
+                        transition: all 0.3s ease !important;
+                    }
+                    
+                    .detail-item:hover .detail-label {
+                        color: #DDC19A !important;
+                        letter-spacing: 4px !important;
+                    }
+                    
+                    .detail-value {
+                        font-size: 18px !important;
+                        font-weight: 300 !important;
+                        color: #2C3E50 !important;
+                        line-height: 1.5 !important;
+                        font-family: 'Playfair Display', serif !important;
+                        transition: all 0.3s ease !important;
+                        margin: 0 !important;
+                    }
+                    
+                    .detail-item:hover .detail-value {
+                        color: #1a252f !important;
+                        font-weight: 400 !important;
+                    }
+                    
+                    /* Typography spacing adjustments */
+                    .values-grid {
+                        gap: 60px !important;
+                    }
+                    
+                    .project-details-grid {
+                        gap: 0 !important;
+                    }
                     </style>
                    <script>
+                    // Simple hover fix when slide changes
                     document.addEventListener('DOMContentLoaded', function() {
-                        // Handle Contact Form 7 newsletter form submission
-                        const wpcf7Form = document.querySelector('.submit-form .wpcf7-form');
-                        const emailInput = document.getElementById('newsletter-email');
-                        const messageDiv = document.querySelector('.wpcf7-response-output');
-                        const submitBtn = document.getElementById('newsletter-submit-btn');
-                        
-                        console.log('Form elements found:', {
-                            form: wpcf7Form,
-                            emailInput: emailInput,
-                            messageDiv: messageDiv,
-                            submitBtn: submitBtn
-                        });
-                        
-                        // Function to handle form submission
-                        function handleNewsletterSubmit() {
-                            const email = emailInput.value.trim();
-                            console.log('Email value:', email);
-                            
-                            if (!email || !isValidEmail(email)) {
-                                showMessage('Vui lòng nhập email hợp lệ', 'error');
-                                return false;
+                        const bannerSlider = document.querySelector('.banner-slider');
+                        if (bannerSlider) {
+                            const swiper = bannerSlider.swiper;
+                            if (swiper) {
+                                swiper.on('slideChange', function() {
+                                    setTimeout(() => {
+                                        const activeContainer = bannerSlider.querySelector('.swiper-slide-active .container');
+                                        if (activeContainer) {
+                                            // Check if mouse is over the active container
+                                            const rect = activeContainer.getBoundingClientRect();
+                                            const mouseX = window.event?.clientX || 0;
+                                            const mouseY = window.event?.clientY || 0;
+                                            
+                                            if (mouseX >= rect.left && mouseX <= rect.right && 
+                                                mouseY >= rect.top && mouseY <= rect.bottom) {
+                                                activeContainer.classList.add('hover-active');
+                                            }
+                                        }
+                                    }, 100);
+                                });
                             }
+                        }
+                    });
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Handle Consultation Form submission
+                        const consultationForm = document.getElementById('consultationForm');
+                        const nameInput = document.getElementById('consultationName');
+                        const emailInput = document.getElementById('consultationEmail');
+                        const brevoConsent = document.getElementById('brevoConsent');
+                        const submitBtn = consultationForm.querySelector('button[type="submit"]');
+                        
+                        if (consultationForm) {
+                            // Store original form HTML for reset
+                            const originalFormHTML = consultationForm.innerHTML;
                             
-                            // Disable form and show loading
-                            emailInput.disabled = true;
-                            emailInput.style.opacity = '0.6';
-                            if (submitBtn) {
-                                submitBtn.disabled = true;
-                                submitBtn.style.opacity = '0.6';
-                                // Keep the arrow icon, don't change text
-                            }
-                            
-                            console.log('Sending AJAX request...');
-                            
-                            // Send AJAX request to our custom handler
-                            fetch('<?php echo admin_url('admin-ajax.php'); ?>', {
+                            // Reset form when modal is shown
+                            $('#consultationModal').on('show.bs.modal', function () {
+                                consultationForm.innerHTML = originalFormHTML;
+                                // Re-get elements after reset
+                                const newNameInput = document.getElementById('consultationName');
+                                const newEmailInput = document.getElementById('consultationEmail');
+                                const newBrevoConsent = document.getElementById('brevoConsent');
+                                const newSubmitBtn = consultationForm.querySelector('button[type="submit"]');
+                                
+                                // Re-bind submit event
+                                if (newSubmitBtn) {
+                                    newSubmitBtn.addEventListener('click', handleFormSubmit);
+                                }
+                                
+                                function handleFormSubmit(e) {
+                                    e.preventDefault();
+                                    
+                                    const name = newNameInput.value.trim();
+                                    const email = newEmailInput.value.trim();
+                                    const consent = newBrevoConsent.checked;
+                                    
+                                    // Validation
+                                    if (!name || !email) {
+                                        alert('Vui lòng nhập đầy đủ thông tin!');
+                                        return;
+                                    }
+                                    
+                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                    if (!emailRegex.test(email)) {
+                                        alert('Vui lòng nhập email hợp lệ!');
+                                        return;
+                                    }
+                                    
+                                    // Disable form and show loading
+                                    newSubmitBtn.disabled = true;
+                                    newSubmitBtn.innerHTML = 'ĐANG XỬ LÝ...';
+                                    
+                                    // Send AJAX request
+                            fetch('<?php echo admin_url("admin-ajax.php"); ?>', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/x-www-form-urlencoded',
                                 },
                                 body: new URLSearchParams({
-                                    action: 'newsletter_signup',
+                                    action: 'consultation_signup',
+                                    name: name,
                                     email: email,
-                                    nonce: '<?php echo wp_create_nonce('newsletter_signup_nonce'); ?>',
-                                    source: 'footer'
+                                    brevo_consent: consent ? '1' : '0',
+                                    nonce: '<?php echo wp_create_nonce("consultation_signup_nonce"); ?>',
+                                    source: 'footer_modal'
                                 })
                             })
                             .then(response => {
-                                console.log('Response received:', response);
-                                return response.json();
-                            })
-                            .then(data => {
-                                console.log('Response data:', data);
-                                if (data.success) {
-                                    showMessage(data.data, 'success');
-                                    emailInput.value = '';
-                                } else {
-                                    showMessage(data.data, 'error');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('AJAX error:', error);
-                                showMessage('Có lỗi xảy ra. Vui lòng thử lại sau.', 'error');
-                            })
-                            .finally(() => {
-                                // Re-enable form
-                                emailInput.disabled = false;
-                                emailInput.style.opacity = '1';
-                                if (submitBtn) {
-                                    submitBtn.disabled = false;
-                                    submitBtn.style.opacity = '1';
-                                    // Keep the arrow icon, don't change text
-                                }
-                            });
-                            
-                            return false;
-                        }
-                        
-                        if (wpcf7Form && emailInput) {
-                            // Prevent form default submission
-                            wpcf7Form.addEventListener('submit', function(e) {
-                                console.log('Form submitted, preventing default');
-                                e.preventDefault();
-                                e.stopPropagation();
-                                return handleNewsletterSubmit();
-                            });
-                            
-                            // Also handle Enter key press
-                            emailInput.addEventListener('keypress', function(e) {
-                                if (e.key === 'Enter') {
-                                    console.log('Enter key pressed');
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    return handleNewsletterSubmit();
-                                }
-                            });
-                        }
-                        
-                        // Add click handler to submit button
-                        if (submitBtn) {
-                            submitBtn.addEventListener('click', function(e) {
-                                console.log('Submit button clicked');
-                                e.preventDefault();
-                                e.stopPropagation();
-                                return handleNewsletterSubmit();
-                            });
-                        }
-                        
-                        // Add click handler to email input area
-                        const emailArea = document.querySelector('.submit-form .wpcf7-form-control-wrap');
-                        if (emailArea) {
-                            emailArea.addEventListener('click', function(e) {
-                                if (e.target === emailArea || e.target.tagName === 'SPAN') {
-                                    const emailInput = emailArea.querySelector('input[type="email"]');
-                                    if (emailInput) {
-                                        emailInput.focus();
+                                console.log('Response status:', response.status);
+                                console.log('Response headers:', response.headers);
+                                return response.text().then(text => {
+                                    console.log('Raw response:', text);
+                                    try {
+                                        return JSON.parse(text);
+                                    } catch (e) {
+                                        console.error('JSON parse error:', e);
+                                        throw new Error('Invalid JSON response');
                                     }
+                                });
+                            })
+                                    .then(data => {
+                                        if (data.success) {
+                                            // Show success message in form
+                                            consultationForm.innerHTML = `
+                                                <div class="text-center py-4">
+                                                    <div style="color: #28a745; font-size: 18px; font-weight: 600; margin-bottom: 10px;">
+                                                        <i class="fas fa-check-circle" style="font-size: 24px; margin-right: 8px;"></i>
+                                                        Đăng ký thành công!
+                                                    </div>
+                                                    <p style="color: #666; font-size: 14px; margin: 0;">
+                                                        Chúng tôi sẽ liên hệ với bạn sớm nhất.
+                                                    </p>
+                                                </div>
+                                            `;
+                                            
+                                            // Close modal after 2 seconds
+                                            setTimeout(() => {
+                                                $('#consultationModal').modal('hide');
+                                                // Alternative method
+                                                setTimeout(() => {
+                                                    $('#consultationModal').modal('hide');
+                                                }, 100);
+                                                // Force close if jQuery modal doesn't work
+                                                setTimeout(() => {
+                                                    const modal = document.getElementById('consultationModal');
+                                                    if (modal) {
+                                                        modal.classList.remove('show');
+                                                        modal.style.display = 'none';
+                                                        document.body.classList.remove('modal-open');
+                                                        const backdrop = document.querySelector('.modal-backdrop');
+                                                        if (backdrop) backdrop.remove();
+                                                    }
+                                                }, 200);
+                                            }, 2000);
+                                        } else {
+                                            alert('Có lỗi xảy ra: ' + data.data);
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('AJAX error:', error);
+                                        alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
+                                    })
+                                    .finally(() => {
+                                        // Re-enable form
+                                        newSubmitBtn.disabled = false;
+                                        newSubmitBtn.innerHTML = 'ĐĂNG KÝ TƯ VẤN';
+                                    });
                                 }
                             });
-                        }
-                        
-                        function showMessage(message, type) {
-                            console.log('Showing message:', message, type);
-                            if (!messageDiv) return;
                             
-                            messageDiv.textContent = message;
-                            messageDiv.className = 'wpcf7-response-output';
-                            
-                            if (type === 'success') {
-                                messageDiv.classList.add('wpcf7-mail-sent-ok');
-                                messageDiv.classList.remove('wpcf7-validation-errors', 'wpcf7-mail-sent-ng');
-                            } else {
-                                messageDiv.classList.add('wpcf7-validation-errors');
-                                messageDiv.classList.remove('wpcf7-mail-sent-ok', 'wpcf7-mail-sent-ng');
-                            }
-                            
-                            messageDiv.style.display = 'block';
-                            messageDiv.setAttribute('aria-hidden', 'false');
-                            
-                            if (type === 'success') {
-                                setTimeout(() => {
-                                    messageDiv.style.display = 'none';
-                                    messageDiv.setAttribute('aria-hidden', 'true');
-                                }, 2000);
-                            }
-                        }
-                        
-                        function isValidEmail(email) {
-                            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                            return emailRegex.test(email);
                         }
                     });
                     </script>
@@ -336,12 +516,12 @@
                             <div class="flex-1 mb-3">Language</div>
                             <div class="language text-right">
                                 <ul class="languages">
-                                    <li class="<?php echo (is_page('en') || get_query_var('pagename') == 'en') ? '' : 'active'; ?>">
-                                        <a href="<?php echo home_url(); ?>">VI</a>
+                                    <li class="<?php echo hoangho_is_english_page() ? '' : 'active'; ?>">                                                                                    
+                                        <a href="<?php echo hoangho_get_language_url('vi'); ?>">VI</a>
                                     </li>
                                     <li class="divider"></li>
-                                    <li class="<?php echo (is_page('en') || get_query_var('pagename') == 'en') ? 'active' : ''; ?>">
-                                        <a href="<?php echo home_url('/en'); ?>">EN</a>
+                                    <li class="<?php echo hoangho_is_english_page() ? 'active' : ''; ?>">                                                                                    
+                                        <a href="<?php echo hoangho_get_language_url('en'); ?>">EN</a>
                                     </li>
                                 </ul>
                             </div>
@@ -350,23 +530,52 @@
                 </div>
             </div>
             <div class="divider"></div>
-            <div class="d-block d-md-flex justify-content-between">
-                <div class="list-term mb-md-0 mb-3">
-                    <div class="item">
-                        <a href="<?php echo home_url(); ?>/chinh-sach-bao-mat"><i class="fas fa-angle-double-right"></i> CHÍNH SÁCH BẢO MẬT</a>
-                    </div>
-                    <div class="item">
-                        <a href="<?php echo home_url(); ?>/mien-tru-trach-nhiem"><i class="fas fa-angle-double-right"></i> MIỄN TRỪ TRÁCH NHIỆM</a>
-                    </div>
-                    <div class="item">
-                        <a href="<?php echo home_url(); ?>/quy-dinh-ve-quyen-rieng-tu"><i class="fas fa-angle-double-right"></i> QUY ĐỊNH VỀ QUYỀN RIÊNG TƯ</a>
-                    </div>
-                </div>
-                <div class="copyright text-right">
-                    © Copyright 2020 HoangHo Real Estate Development<br>
+            <div class="d-flex justify-content-center">
+                <div class="copyright text-center">
+                    © Copyright 2023 Hoangvubro Real Estate Development<br>
                     <a href="#">
                         <img style="width: 100px; margin-top: 10px;" src="<?php echo get_template_directory_uri(); ?>/assets/images/bo-cong-thuong.png" alt="Bộ Công Thương" />
                     </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consultation Modal -->
+    <div class="modal fade" id="consultationModal" tabindex="-1" role="dialog" aria-labelledby="consultationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <div class="modal-header" style="border: none; padding: 30px 30px 0; position: relative;">
+                    <h4 class="modal-title text-center w-100" id="consultationModalLabel" style="color: #DDC19A; font-weight: 700; font-size: 24px; line-height: 1.3;">
+                        Đăng ký ngay để được tư vấn<br><span style="color: #DDC19A;">chuyên sâu</span>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #999;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="padding: 20px 30px 30px;">
+                    <form id="consultationForm">
+                        <div class="mb-4">
+                            <input type="text" class="form-control" id="consultationName" placeholder="Tên của bạn" required style="border: 2px solid #ddd; border-radius: 8px; padding: 12px 15px; font-size: 16px; text-align: center; transition: border-color 0.3s ease; height: 48px; line-height: 1.5;">
+                        </div>
+                        <div class="mb-4">
+                            <input type="email" class="form-control" id="consultationEmail" placeholder="Email của bạn" required style="border: 2px solid #ddd; border-radius: 8px; padding: 12px 15px; font-size: 16px; text-align: center; transition: border-color 0.3s ease; height: 48px; line-height: 1.5;">
+                        </div>
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="brevoConsent" style="transform: scale(1.2); cursor: pointer;">
+                                <label class="form-check-label" for="brevoConsent" style="font-size: 14px; color: #666; cursor: pointer;">
+                                    Tôi đồng ý nhận thông tin tư vấn dự án qua email.
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-consultation-modal w-100" style="background: linear-gradient(135deg, #DDC19A, #C4A882); border: none; padding: 15px; border-radius: 8px; font-weight: 600; color: #2C3E50; font-size: 16px; text-transform: uppercase; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(221, 193, 154, 0.3); transform: translateY(0);">
+                                <span style="position: relative; z-index: 2; transition: all 0.3s ease;">ĐĂNG KÝ TƯ VẤN</span>
+                                <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(135deg, #C4A882, #DDC19A); transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); z-index: 1;"></div>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

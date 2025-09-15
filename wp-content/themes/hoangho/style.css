@@ -64,6 +64,19 @@ img {
     height: 100vh;
 }
 
+.homepage .section-we-are {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+}
+
+/* Force override with higher specificity */
+section.section.section-we-are {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+}
+
 @media screen and (max-width: 991px) {
     .homepage .section {
         height: auto;

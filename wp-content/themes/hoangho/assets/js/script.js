@@ -1,4 +1,4 @@
-$(document).ready(function () {
+jQuery(document).ready(function ($) {
   var speed = 1000;
   // fullpage
   {
@@ -101,6 +101,13 @@ $(document).ready(function () {
         });
     });
     function autoTheme() {
+      // Check if at top of page (scrollTop = 0)
+      if ($(window).scrollTop() === 0) {
+        $("[data-auto-theme]").attr("data-auto-theme", "white");
+        $(".nav-header").removeAttr("data-nav");
+        return;
+      }
+
       if (fullpage) {
         // get slide active
         var theme = $(fullpage.slides[fullpage.realIndex]).data("toggle-theme");
@@ -118,25 +125,34 @@ $(document).ready(function () {
           var height = $autoTheme.outerHeight();
           var topCenter = top + height / 2;
           var leftCenter = left + width / 2;
-          $toggleTheme.each(function () {
-            var theme = $(this).data("toggle-theme");
-            var top = $(this).offset().top;
-            var left = $(this).offset().left;
-            var width = $(this).outerWidth();
-            var height = $(this).outerHeight();
-            var right = left + width;
-            var bottom = top + height;
-            if (
-              top <= topCenter &&
-              bottom >= topCenter &&
-              left <= leftCenter &&
-              right >= leftCenter
-            ) {
-              $autoTheme.attr("data-auto-theme", theme);
-              if ($autoTheme.hasClass("logo-container"))
-                $(".nav-header").attr("data-nav", theme);
-            }
-          });
+
+          // Check if autoTheme element is at the very top of the page
+          if (top <= 50) {
+            // Within 50px of top
+            $autoTheme.attr("data-auto-theme", "white");
+            if ($autoTheme.hasClass("logo-container"))
+              $(".nav-header").removeAttr("data-nav");
+          } else {
+            $toggleTheme.each(function () {
+              var theme = $(this).data("toggle-theme");
+              var top = $(this).offset().top;
+              var left = $(this).offset().left;
+              var width = $(this).outerWidth();
+              var height = $(this).outerHeight();
+              var right = left + width;
+              var bottom = top + height;
+              if (
+                top <= topCenter &&
+                bottom >= topCenter &&
+                left <= leftCenter &&
+                right >= leftCenter
+              ) {
+                $autoTheme.attr("data-auto-theme", theme);
+                if ($autoTheme.hasClass("logo-container"))
+                  $(".nav-header").attr("data-nav", theme);
+              }
+            });
+          }
         });
       }
     }
@@ -848,6 +864,32 @@ $(document).ready(function () {
     });
   }
   {
+    // Smooth scroll for anchor links
+    $('a[href^="#"]').click(function (e) {
+      var href = $(this).attr("href");
+      if (href !== "#" && $(href).length) {
+        e.preventDefault();
+        $("body, html").animate(
+          { scrollTop: $(href).offset().top - $(".nav-header").height() },
+          800
+        );
+      }
+    });
+  }
+  {
+    // Close menu when clicking modal trigger links
+    $('a[data-toggle="modal"]').click(function () {
+      $(".overlay-menu").removeClass("open");
+      $(".nav-header").removeClass("open");
+    });
+
+    // Close menu when modal is shown
+    $(".modal").on("show.bs.modal", function () {
+      $(".overlay-menu").removeClass("open");
+      $(".nav-header").removeClass("open");
+    });
+  }
+  {
     $(".play-video").click(function () {
       var $this = $(this);
       $this.next()[0].play();
@@ -901,7 +943,7 @@ $(document).ready(function () {
   }
   {
     $(window).scroll(function () {
-      if ($(window).scrollTop() > 10) {
+      if ($(window).scrollTop() > 0) {
         if (!$("#header").hasClass("sticky")) $("#header").addClass("sticky");
       } else {
         if ($("#header").hasClass("sticky")) $("#header").removeClass("sticky");

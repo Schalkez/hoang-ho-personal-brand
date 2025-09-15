@@ -3,7 +3,13 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title><?php wp_title('|', true, 'right'); ?><?php bloginfo('name'); ?></title>
+    
+    <!-- Preload critical hero slider images -->
+    <link rel="preload" as="image" href="<?php echo content_url(); ?>/uploads/2025/09/VIEWBALCONY_FINAL2@1x_1-1-1024x512.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="<?php echo content_url(); ?>/uploads/2025/09/MEYPEARL_V07_OVERVIEW5_FINAL-1024x731.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="<?php echo content_url(); ?>/uploads/2025/09/Tongthenhintubienvao-1024x576.webp" fetchpriority="high">
     
     <?php wp_head(); ?>
 </head>
@@ -14,26 +20,24 @@
         <div class="container">
             <div class="content">
                 <a href="<?php echo home_url(); ?>" class="logo-container" data-auto-theme="white">
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.svg" alt="<?php bloginfo('name'); ?>" class="logo" />
-                    <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo-white.svg" alt="<?php bloginfo('name'); ?>" class="logo logo-white auto-fill" />
+                    <img src="<?php echo content_url(); ?>/uploads/2025/09/MEYPEARL-LOGO-GUIDELINE_MP-goc-Ngang-e1757601715852.png" alt="<?php bloginfo('name'); ?>" class="logo" />
+                    <img src="<?php echo content_url(); ?>/uploads/2025/09/MEYPEARL-LOGO-GUIDELINE_MP-am-ban-ngang-1-e1757755489177.webp" alt="<?php bloginfo('name'); ?>" class="logo logo-white auto-fill" />
                 </a>
                 <div class="d-flex align-items-center">
-                    <!-- Menu toggle button temporarily disabled -->
-                    <!--
+                    <!-- Menu toggle button -->
                     <div class="menu-toggle-btn toggle-menu mr-3" data-auto-theme="white">
                         <span></span>
                         <span></span>
                         <span></span>
                     </div>
-                    -->
                     <div data-auto-theme="white">
                         <ul class="languages">
-                            <li class="<?php echo (is_page('en') || get_query_var('pagename') == 'en') ? '' : 'active'; ?>">
-                                <a href="<?php echo home_url(); ?>">VI</a>
+                            <li class="<?php echo hoangho_is_english_page() ? '' : 'active'; ?>">                                                                                            
+                                <a href="<?php echo hoangho_get_language_url('vi'); ?>">VI</a>
                             </li>
                             <li class="divider"></li>
-                            <li class="<?php echo (is_page('en') || get_query_var('pagename') == 'en') ? 'active' : ''; ?>">
-                                <a href="<?php echo home_url('/en'); ?>">EN</a>
+                            <li class="<?php echo hoangho_is_english_page() ? 'active' : ''; ?>">                                                                                            
+                                <a href="<?php echo hoangho_get_language_url('en'); ?>">EN</a>
                             </li>
                         </ul>
                     </div>
@@ -79,34 +83,13 @@
 </header>
 
 <?php
-// Default menu fallback
+// Default menu fallback - chỉ hiển thị các trang hiện có
 function hoangho_default_menu() {
     echo '<ul class="main-menu">';
-    echo '<li class="item has-dropdown"><a href="#about-us" class="item-link">CÂU CHUYỆN HOANGHO</a>';
-    echo '<ul class="sub-menu">';
-    echo '<li class="item"><a href="' . home_url('/thong-diep-thuong-hieu') . '" class="item-link">THÔNG ĐIỆP THƯƠNG HIỆU</a></li>';
-    echo '<li class="item"><a href="' . home_url('/gia-tri-nen-tang') . '" class="item-link">GIÁ TRỊ NỀN TẢNG</a></li>';
-    echo '<li class="item"><a href="' . home_url('/doi-ngu-lanh-dao') . '" class="item-link">ĐỘI NGŨ LÃNH ĐẠO</a></li>';
-    echo '<li class="item"><a href="' . home_url('/dau-an-thanh-tuu') . '" class="item-link">DẤU ẤN - THÀNH TỰU</a></li>';
-    echo '<li class="item"><a href="' . home_url('/trach-nhiem-xa-hoi') . '" class="item-link">TRÁCH NHIỆM XÃ HỘI</a></li>';
-    echo '<li class="item"><a href="' . home_url('/doi-tac-dong-hanh') . '" class="item-link">ĐỐI TÁC ĐỒNG HÀNH</a></li>';
-    echo '</ul></li>';
-    echo '<li class="item has-dropdown"><a href="#business" class="item-link">DỰ ÁN</a>';
-    echo '<ul class="sub-menu">';
-    echo '<li class="item"><a href="' . home_url('/thehoanghodanang') . '" class="item-link">THE HOANGHO DA NANG</a></li>';
-    echo '<li class="item"><a href="' . home_url('/soma') . '" class="item-link">SOMA</a></li>';
-    echo '</ul></li>';
-    echo '<li class="item has-dropdown"><a href="#social" class="item-link">TRUYỀN THÔNG - THƯ VIỆN</a>';
-    echo '<ul class="sub-menu">';
-    echo '<li class="item"><a href="' . home_url('/tin-tuc') . '" class="item-link">THEO DÒNG SỰ KIỆN</a></li>';
-    echo '<li class="item"><a href="' . home_url('/thu-vien') . '" class="item-link">HÌNH ẢNH - VIDEO</a></li>';
-    echo '</ul></li>';
-    echo '<li class="item has-dropdown"><a href="#chance" class="item-link">PHÁT TRIỂN NGUỒN NHÂN LỰC</a>';
-    echo '<ul class="sub-menu">';
-    echo '<li class="item"><a href="' . home_url('/moi-truong-hoangho') . '" class="item-link">MÔI TRƯỜNG HOANGHO</a></li>';
-    echo '<li class="item"><a href="' . home_url('/tuyen-dung') . '" class="item-link">CƠ HỘI NGHỀ NGHIỆP</a></li>';
-    echo '</ul></li>';
-    echo '<li class="item"><a href="' . home_url('/thong-tin-lien-he') . '" class="item-link">LIÊN HỆ</a></li>';
+    echo '<li class="item"><a href="' . home_url() . '" class="item-link">TRANG CHỦ</a></li>';
+    echo '<li class="item"><a href="' . home_url('/phap-ly-du-an') . '" class="item-link">PHÁP LÝ DỰ ÁN</a></li>';
+    echo '<li class="item"><a href="' . home_url('/bo-suu-tap-can-ho') . '" class="item-link">BỘ SƯU TẬP CĂN HỘ</a></li>';
+    echo '<li class="item"><a href="#" class="item-link" data-toggle="modal" data-target="#consultationModal">ĐĂNG KÝ TƯ VẤN</a></li>';
     echo '</ul>';
 }
 ?>

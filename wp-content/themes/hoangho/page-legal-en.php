@@ -29,7 +29,7 @@ get_header('en');
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('<?php echo get_template_directory_uri(); ?>/assets/images/legal-pattern.png') center/cover;
+    /* background: url('<?php echo get_template_directory_uri(); ?>/assets/images/legal-pattern.png') center/cover; */
     opacity: 0.1;
     z-index: 1;
 }
@@ -523,7 +523,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(1)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="<?php echo wp_get_attachment_url(get_attachment_id_by_slug('Bao-lanh-ngan-hang-trang-dau')); ?>" class="btn-download" download>
+                    <a href="#" class="btn-download" onclick="downloadAllPages(1)">
                         <i class="fas fa-download"></i> Download
                     </a>
                 </div>
@@ -545,7 +545,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(2)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="<?php echo wp_get_attachment_url(get_attachment_id_by_slug('Chu-truong-dau-tu-trang-dau')); ?>" class="btn-download" download>
+                    <a href="#" class="btn-download" onclick="downloadAllPages(2)">
                         <i class="fas fa-download"></i> Download
                     </a>
                 </div>
@@ -567,7 +567,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(3)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="<?php echo wp_get_attachment_url(get_attachment_id_by_slug('hop-dong-mua-ban-da-duoc-duyet')); ?>" class="btn-download" download>
+                    <a href="#" class="btn-download" onclick="downloadAllPages(3)">
                         <i class="fas fa-download"></i> Download
                     </a>
                 </div>
@@ -589,7 +589,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(4)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="<?php echo wp_get_attachment_url(get_attachment_id_by_slug('Chung-nhan-quyen-su-dung-mat-ngoai')); ?>" class="btn-download" download>
+                    <a href="#" class="btn-download" onclick="downloadAllPages(4)">
                         <i class="fas fa-download"></i> Download
                     </a>
                 </div>
@@ -611,7 +611,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(5)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="<?php echo wp_get_attachment_url(get_attachment_id_by_slug('Giay-phep-xay-dung-trang-dau')); ?>" class="btn-download" download>
+                    <a href="#" class="btn-download" onclick="downloadAllPages(5)">
                         <i class="fas fa-download"></i> Download
                     </a>
                 </div>
@@ -633,7 +633,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(6)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="<?php echo wp_get_attachment_url(get_attachment_id_by_slug('Thong-bao-du-dieu-kien-mo-ban-trang-dau')); ?>" class="btn-download" download>
+                    <a href="#" class="btn-download" onclick="downloadAllPages(6)">
                         <i class="fas fa-download"></i> Download
                     </a>
                 </div>
@@ -655,7 +655,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(7)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="<?php echo wp_get_attachment_url(get_attachment_id_by_slug('Quy-hoach-1500-trang-dau')); ?>" class="btn-download" download>
+                    <a href="#" class="btn-download" onclick="downloadAllPages(7)">
                         <i class="fas fa-download"></i> Download
                     </a>
                 </div>
@@ -788,7 +788,7 @@ function openLegalModal(documentId) {
     currentDocument = documentId;
     currentPage = 'page1';
     updateModal();
-    $('#legalModal').modal('show');
+    jQuery('#legalModal').modal('show');
 }
 
 function switchPage(direction) {
@@ -816,9 +816,30 @@ function updateModal() {
     document.getElementById('nextPage').disabled = currentPage === 'page2';
 }
 
+function downloadAllPages(documentId) {
+    const doc = legalDocuments[documentId];
+    const title = doc.title;
+    
+    // Download page 1
+    const link1 = document.createElement('a');
+    link1.href = doc.page1;
+    link1.download = `${title} - Page 1.jpg`;
+    link1.click();
+    
+    // Download page 2 (if different from page 1)
+    if (doc.page2 !== doc.page1) {
+        setTimeout(() => {
+            const link2 = document.createElement('a');
+            link2.href = doc.page2;
+            link2.download = `${title} - Page 2.jpg`;
+            link2.click();
+        }, 500);
+    }
+}
+
 // Close modal when clicking outside
 jQuery(document).ready(function($) {
-    $('#legalModal').on('hidden.bs.modal', function () {
+    jQuery('#legalModal').on('hidden.bs.modal', function () {
         // Reset to page 1 when modal is closed
         currentPage = 'page1';
     });

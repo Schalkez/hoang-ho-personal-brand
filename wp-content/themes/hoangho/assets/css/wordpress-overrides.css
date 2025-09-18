@@ -1,2 +1,25 @@
 /* WordPress overrides for HoangHo theme */
-/* This file is intentionally left mostly empty for WordPress specific overrides */
+
+/*
+ * Fix: Vertically center nav items in overlay menu
+ * Context: When the menu opens, items appear slightly shifted upward.
+ * We explicitly center the menu block and each item with flexbox.
+ */
+.overlay-menu .main-menu-container {
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.overlay-menu .main-menu {
+  margin: 0 !important; /* prevent auto margins from biasing the block */
+}
+
+.overlay-menu .main-menu .item {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.overlay-menu .main-menu .item-link {
+  line-height: 1.2 !important; /* reduce baseline drift with large fonts */
+}

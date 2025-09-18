@@ -420,7 +420,7 @@
             const originalFormHTML = consultationForm.innerHTML;
             
             // Reset form when modal is shown
-            $('#consultationModal').on('show.bs.modal', function () {
+            jQuery('#consultationModal').on('show.bs.modal', function () {
                 consultationForm.innerHTML = originalFormHTML;
                 // Re-get elements after reset
                 const newNameInput = document.getElementById('consultationName');

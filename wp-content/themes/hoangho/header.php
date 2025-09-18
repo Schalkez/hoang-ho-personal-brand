@@ -89,6 +89,8 @@ function hoangho_default_menu() {
     echo '<li class="item"><a href="' . home_url() . '" class="item-link">TRANG CHỦ</a></li>';
     echo '<li class="item"><a href="' . home_url('/phap-ly-du-an') . '" class="item-link">PHÁP LÝ DỰ ÁN</a></li>';
     echo '<li class="item"><a href="' . home_url('/bo-suu-tap-can-ho') . '" class="item-link">BỘ SƯU TẬP CĂN HỘ</a></li>';
+    // External 360 view link under the collection
+    echo '<li class="item"><a href="https://momento360.com/e/u/3a15cca810b8411f815e4afcbb9857a8?&heading=7.89&pitch=-33.32&field-of-view=100&size=medium" class="item-link" target="_blank" rel="noopener">360 ĐỘ THỰC TẾ DỰ ÁN</a></li>';
     echo '<li class="item"><a href="#" class="item-link" data-toggle="modal" data-target="#consultationModal">ĐĂNG KÝ TƯ VẤN</a></li>';
     echo '</ul>';
 }

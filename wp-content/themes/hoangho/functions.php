@@ -140,8 +140,12 @@ function hoangho_handle_consultation_signup() {
     // If user consented, add to Brevo
     if ($brevo_consent && class_exists('SIB_API_Manager')) {
         try {
-            // Get default list ID from Brevo settings - use actual list ID
-            $default_list_id = 5; // Use the actual list ID from Brevo (cskh_80days)
+            // Get Brevo list ID to subscribe new contacts
+            // Prefer a constant (define('HOANGHO_BREVO_LIST_ID', 4)) if set,
+            // otherwise fall back to Brevo plugin's default list ID, with 4 as last resort
+            $default_list_id = defined('HOANGHO_BREVO_LIST_ID')
+                ? (int) HOANGHO_BREVO_LIST_ID
+                : (int) get_option('sib_default_list_id', 4);
             
             // Prepare contact info for Brevo - split name into first and last name
             $name_parts = explode(' ', trim($name), 2);
@@ -517,6 +521,8 @@ function hoangho_default_menu_en() {
     echo '<li class="item"><a href="' . home_url('/en/') . '" class="item-link">HOME</a></li>';
     echo '<li class="item"><a href="' . home_url('/en/legal-documents/') . '" class="item-link">LEGAL DOCUMENTS</a></li>';
     echo '<li class="item"><a href="' . home_url('/en/residential-portfolio/') . '" class="item-link">APARTMENT COLLECTION</a></li>';
+    // External 360 view link under the collection (English)
+    echo '<li class="item"><a href="https://momento360.com/e/u/3a15cca810b8411f815e4afcbb9857a8?&heading=7.89&pitch=-33.32&field-of-view=100&size=medium" class="item-link" target="_blank" rel="noopener">360° PROJECT TOUR</a></li>';
     echo '<li class="item"><a href="#" class="item-link" data-toggle="modal" data-target="#consultationModal">REGISTER FOR CONSULTATION</a></li>';
     echo '</ul>';
 }

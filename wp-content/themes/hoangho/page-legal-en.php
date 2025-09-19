@@ -523,9 +523,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(1)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="#" class="btn-download" onclick="downloadAllPages(1)">
-                        <i class="fas fa-download"></i> Download
-                    </a>
+                    
                 </div>
             </div>
 
@@ -545,9 +543,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(2)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="#" class="btn-download" onclick="downloadAllPages(2)">
-                        <i class="fas fa-download"></i> Download
-                    </a>
+                    
                 </div>
             </div>
 
@@ -567,9 +563,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(3)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="#" class="btn-download" onclick="downloadAllPages(3)">
-                        <i class="fas fa-download"></i> Download
-                    </a>
+                    
                 </div>
             </div>
 
@@ -589,9 +583,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(4)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="#" class="btn-download" onclick="downloadAllPages(4)">
-                        <i class="fas fa-download"></i> Download
-                    </a>
+                    
                 </div>
             </div>
 
@@ -611,9 +603,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(5)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="#" class="btn-download" onclick="downloadAllPages(5)">
-                        <i class="fas fa-download"></i> Download
-                    </a>
+                    
                 </div>
             </div>
 
@@ -633,9 +623,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(6)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="#" class="btn-download" onclick="downloadAllPages(6)">
-                        <i class="fas fa-download"></i> Download
-                    </a>
+                    
                 </div>
             </div>
 
@@ -655,9 +643,7 @@ get_header('en');
                     <a href="#" class="btn-view-document" onclick="openLegalModal(7)">
                         <i class="fas fa-eye"></i> View Details
                     </a>
-                    <a href="#" class="btn-download" onclick="downloadAllPages(7)">
-                        <i class="fas fa-download"></i> Download
-                    </a>
+                    
                 </div>
             </div>
         </div>
@@ -776,7 +762,7 @@ const legalDocuments = {
     7: {
         title: "1.500 Billion Planning",
         page1: "<?php echo wp_get_attachment_url(get_attachment_id_by_slug('Quy-hoach-1500-trang-dau')); ?>",
-        page2: "<?php echo wp_get_attachment_url(get_attachment_id_by_slug('Quy-hoach-1500-trang-cuối')); ?>",
+        page2: "<?php echo wp_get_attachment_url(get_attachment_id_by_slug('Quy-hoach-1500-trang-cuoi')); ?>",
         description: "1.500 billion VND planning approved by competent authorities, guiding development of the yacht apartment project."
     }
 };
